@@ -3,3 +3,6 @@ service:
   identifier: harnessevalservice
   orgIdentifier: pismo
   projectIdentifier: harnessdeployeval
+  serviceDefinition:
+    spec: {}
+    type: Kubernetes
