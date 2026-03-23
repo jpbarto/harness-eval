@@ -21,6 +21,20 @@ pipeline:
               - identifier: <+pipeline.variables.envInfraRef>
           execution:
             steps:
+              - step:
+                  type: ShellScript
+                  name: ShellScript_1
+                  identifier: ShellScript_1
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: echo I am version 1 of the deploy pipeline
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
               - stepGroup:
                   name: Canary Deployment
                   identifier: canaryDepoyment
