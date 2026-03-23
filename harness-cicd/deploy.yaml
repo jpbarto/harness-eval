@@ -31,7 +31,7 @@ pipeline:
                     source:
                       type: Inline
                       spec:
-                        script: echo I am version 2 of the deploy pipeline
+                        script: echo I am version 3 of the deploy pipeline
                     environmentVariables: []
                     outputVariables: []
                   timeout: 10m
