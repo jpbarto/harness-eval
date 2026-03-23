@@ -1,6 +1,6 @@
 pipeline:
   name: harness-app-eval-deploy-git
-  identifier: harnessevaldeploygit
+  identifier: harnessappevaldeploygit
   projectIdentifier: harnessdeployeval
   orgIdentifier: pismo
   tags: {}
