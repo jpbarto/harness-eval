@@ -1,0 +1,5 @@
+service:
+  name: harness-eval-service
+  identifier: harnessevalservice
+  orgIdentifier: pismo
+  projectIdentifier: harnessdeployeval
