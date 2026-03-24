@@ -10,28 +10,78 @@ pipeline:
         - insert:
             identifier: Deploy
             stages:
-              - stage:
-                  name: CustomDeploy
-                  identifier: CustomDeploy
-                  description: ""
-                  type: Custom
-                  spec:
-                    execution:
-                      steps:
-                        - step:
-                            type: ShellScript
-                            name: ShellScript_1
-                            identifier: ShellScript_1
-                            spec:
-                              shell: Bash
-                              executionTarget: {}
-                              source:
-                                type: Inline
+              - parallel:
+                  - stage:
+                      name: CustomDeploy
+                      identifier: CustomDeploy
+                      description: ""
+                      type: Custom
+                      spec:
+                        execution:
+                          steps:
+                            - step:
+                                type: ShellScript
+                                name: ShellScript_1
+                                identifier: ShellScript_1
                                 spec:
-                                  script: echo preparing to install harness eval
-                              environmentVariables: []
-                              outputVariables: []
-                            timeout: 10m
-                  tags: {}
+                                  shell: Bash
+                                  executionTarget: {}
+                                  source:
+                                    type: Inline
+                                    spec:
+                                      script: echo preparing to install harness eval
+                                  environmentVariables: []
+                                  outputVariables: []
+                                timeout: 10m
+                      tags: {}
+                  - stage:
+                      name: DeployK8sDescriptors
+                      identifier: DeployK8sDescriptors
+                      description: ""
+                      type: Deployment
+                      spec:
+                        deploymentType: Kubernetes
+                        service:
+                          serviceRef: harnessevalservice
+                        environment:
+                          environmentRef: jpbartoenv
+                          deployToAll: false
+                          infrastructureDefinitions:
+                            - identifier: jpbartok8sinfra
+                        execution:
+                          steps:
+                            - step:
+                                name: Stage Deployment
+                                identifier: stageDeployment
+                                type: K8sBlueGreenDeploy
+                                timeout: 10m
+                                spec:
+                                  skipDryRun: false
+                                  pruningEnabled: false
+                            - step:
+                                name: Swap primary with stage service
+                                identifier: bgSwapServices
+                                type: K8sBGSwapServices
+                                timeout: 10m
+                                spec:
+                                  skipDryRun: false
+                          rollbackSteps:
+                            - step:
+                                name: Swap primary with stage service
+                                identifier: rollbackBgSwapServices
+                                type: K8sBGSwapServices
+                                timeout: 10m
+                                spec:
+                                  skipDryRun: false
+                      tags: {}
+                      failureStrategies:
+                        - onFailure:
+                            errors:
+                              - AllErrors
+                            action:
+                              type: StageRollback
+                      sendGitStatus:
+                        enabled: true
+                        name: bob
   projectIdentifier: harnessdeployeval
   orgIdentifier: pismo
