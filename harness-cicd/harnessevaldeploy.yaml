@@ -1,0 +1,37 @@
+pipeline:
+  name: harness-eval-deploy
+  identifier: harnessevaldeploy
+  tags: {}
+  template:
+    templateRef: jpbartodeploymenttemplate
+    versionLabel: v1
+    templateInputs:
+      stages:
+        - insert:
+            identifier: Deploy
+            stages:
+              - stage:
+                  name: CustomDeploy
+                  identifier: CustomDeploy
+                  description: ""
+                  type: Custom
+                  spec:
+                    execution:
+                      steps:
+                        - step:
+                            type: ShellScript
+                            name: ShellScript_1
+                            identifier: ShellScript_1
+                            spec:
+                              shell: Bash
+                              executionTarget: {}
+                              source:
+                                type: Inline
+                                spec:
+                                  script: echo preparing to install harness eval
+                              environmentVariables: []
+                              outputVariables: []
+                            timeout: 10m
+                  tags: {}
+  projectIdentifier: harnessdeployeval
+  orgIdentifier: pismo
