@@ -57,6 +57,9 @@ pipeline:
                                       region: eu-west-1
                                       roleArn: ""
                             timeout: 10m
+                  outputs:
+                    - name: deployTFOutput
+                      value: there is value here
                   tags: {}
               - stage:
                   name: DeployK8s
