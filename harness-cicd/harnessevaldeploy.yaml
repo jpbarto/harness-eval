@@ -51,6 +51,28 @@ pipeline:
                     execution:
                       steps:
                         - step:
+                            type: K8sApply
+                            name: K8sApply_1
+                            identifier: K8sApply_1
+                            spec:
+                              skipDryRun: false
+                              skipSteadyStateCheck: false
+                              skipRendering: false
+                              overrides: []
+                              manifestSource:
+                                type: K8sManifest
+                                spec:
+                                  store:
+                                    type: Github
+                                    spec:
+                                      connectorRef: jpbartogithubconn
+                                      paths:
+                                        - harness-cicd/harnesseval-ns.yaml
+                                      gitFetchType: Branch
+                                      branch: main
+                                      repoName: harness-eval
+                            timeout: 10m
+                        - step:
                             name: Stage Deployment
                             identifier: stageDeployment
                             type: K8sBlueGreenDeploy
