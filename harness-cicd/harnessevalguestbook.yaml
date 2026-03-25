@@ -3,3 +3,23 @@ service:
   identifier: harnessevalguestbook
   orgIdentifier: pismo
   projectIdentifier: harnessdeployeval
+  serviceDefinition:
+    spec:
+      manifests:
+        - manifest:
+            identifier: guestbook_ui
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: jpbartogithubconn
+                  gitFetchType: Branch
+                  paths:
+                    - guestbook/guestbook-ui-deployment.yaml
+                    - guestbook/guestbook-ui-service.yaml
+                  repoName: harness-eval
+                  branch: main
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+    type: Kubernetes
