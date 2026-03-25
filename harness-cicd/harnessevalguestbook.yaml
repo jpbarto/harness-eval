@@ -1,0 +1,5 @@
+service:
+  name: harness-eval-guestbook
+  identifier: harnessevalguestbook
+  orgIdentifier: pismo
+  projectIdentifier: harnessdeployeval
