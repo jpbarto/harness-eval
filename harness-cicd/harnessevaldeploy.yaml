@@ -41,7 +41,7 @@ pipeline:
                   spec:
                     deploymentType: Kubernetes
                     service:
-                      serviceRef: harnessevalservice
+                      serviceRef: harnessevalguestbook
                       disableArtifactValidation: true
                     environment:
                       environmentRef: jpbartoenv
