@@ -91,7 +91,7 @@ pipeline:
                               source:
                                 type: Inline
                                 spec:
-                                  script: echo see output value as <+pipeline.stages.DeployTF.output.deployTFOutput>
+                                  script: echo see output value as
                               environmentVariables: []
                               outputVariables: []
                             timeout: 10m
