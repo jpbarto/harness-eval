@@ -9,7 +9,44 @@ pipeline:
       stages:
         - insert:
             identifier: Plan
-            stages: <+input>
+            stages:
+              - stage:
+                  name: Plan TF Deployment
+                  identifier: Plan_TF_Deployment
+                  description: ""
+                  type: Custom
+                  spec:
+                    execution:
+                      steps:
+                        - step:
+                            type: TerraformPlan
+                            name: TerraformPlan_1
+                            identifier: TerraformPlan_1
+                            spec:
+                              provisionerIdentifier: harnessTFPlanProvisioner
+                              configuration:
+                                command: Apply
+                                configFiles:
+                                  store:
+                                    spec:
+                                      connectorRef: jpbartogithubconn
+                                      repoName: harness-eval
+                                      gitFetchType: Branch
+                                      branch: main
+                                      folderPath: terraform
+                                    type: Github
+                                providerCredential:
+                                  type: Aws
+                                  spec:
+                                    connectorRef: jpbartoaws
+                                    region: eu-west-1
+                                    roleArn: ""
+                                secretManagerRef: harnessSecretManager
+                                exportTerraformPlanJson: true
+                                storeTfPlanOnDelegate: true
+                                exportTerraformHumanReadablePlan: true
+                            timeout: 10m
+                  tags: {}
         - insert:
             identifier: Deploy
             stages:
@@ -170,6 +207,29 @@ pipeline:
                           type: StageRollback
         - insert:
             identifier: Validate
-            stages: <+input>
+            stages:
+              - stage:
+                  name: Validate Deployment
+                  identifier: Validate_Deployment
+                  description: ""
+                  type: Custom
+                  spec:
+                    execution:
+                      steps:
+                        - step:
+                            type: ShellScript
+                            name: ShellScript_1
+                            identifier: ShellScript_1
+                            spec:
+                              shell: Bash
+                              executionTarget: {}
+                              source:
+                                type: Inline
+                                spec:
+                                  script: echo evaluating deployment success
+                              environmentVariables: []
+                              outputVariables: []
+                            timeout: 10m
+                  tags: {}
   projectIdentifier: harnessdeployeval
   orgIdentifier: pismo
