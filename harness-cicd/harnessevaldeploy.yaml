@@ -30,7 +30,13 @@ pipeline:
                                 spec:
                                   script: echo preparing to install harness eval
                               environmentVariables: []
-                              outputVariables: []
+                              outputVariables:
+                                - name: deployTFScriptOutput
+                                  type: String
+                                  value: i am a value
+                              outputAlias:
+                                scope: Pipeline
+                                key: deployTFScriptOutputAlias
                             timeout: 10m
                         - step:
                             type: TerraformApply
@@ -57,9 +63,6 @@ pipeline:
                                       region: eu-west-1
                                       roleArn: ""
                             timeout: 10m
-                  outputs:
-                    - name: deployTFOutput
-                      value: there is value here
                   tags: {}
               - stage:
                   name: DeployK8s
