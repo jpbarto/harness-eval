@@ -63,6 +63,23 @@ pipeline:
                                       region: eu-west-1
                                       roleArn: ""
                             timeout: 10m
+                        - step:
+                            type: ShellScript
+                            name: ShellScript_FYZ
+                            identifier: ShellScript_FYZ
+                            spec:
+                              shell: Bash
+                              executionTarget: {}
+                              source:
+                                type: Inline
+                                spec:
+                                  script: |-
+                                    echo reading value from template stage <+pipeline.stages.Prepare.variables.DeployInput>
+                                    echo reading value from prior step
+                                    echo now saying something else
+                              environmentVariables: []
+                              outputVariables: []
+                            timeout: 10m
                   tags: {}
               - stage:
                   name: DeployK8s
