@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: jpbarto-app-ns
-  labels:
-    kubernetes.io/metadata.name: jpbarto-app-ns

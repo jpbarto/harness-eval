@@ -130,7 +130,7 @@ pipeline:
                                     spec:
                                       connectorRef: jpbartogithubconn
                                       paths:
-                                        - harness-cicd/harnesseval-ns.yaml
+                                        - guestbook/guestbook-ns.yaml
                                       gitFetchType: Branch
                                       branch: main
                                       repoName: harness-eval
