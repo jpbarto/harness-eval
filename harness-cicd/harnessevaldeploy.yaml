@@ -8,6 +8,9 @@ pipeline:
     templateInputs:
       stages:
         - insert:
+            identifier: Plan
+            stages: <+input>
+        - insert:
             identifier: Deploy
             stages:
               - stage:
@@ -165,5 +168,8 @@ pipeline:
                           - AllErrors
                         action:
                           type: StageRollback
+        - insert:
+            identifier: Validate
+            stages: <+input>
   projectIdentifier: harnessdeployeval
   orgIdentifier: pismo
