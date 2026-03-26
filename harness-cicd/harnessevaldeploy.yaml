@@ -75,7 +75,8 @@ pipeline:
                                 spec:
                                   script: |-
                                     echo reading value from template stage <+pipeline.stages.Prepare.variables.DeployInput>
-                                    echo reading value from prior step
+                                    echo reading value from prior tf step <+pipeline.stages.Deploy.stages.CustomDeploy.spec.execution.steps.TerraformApply_1.log.url>
+                                    echo reading value from prior shell step <+pipeline.stages.Deploy.stages.CustomDeploy.spec.execution.steps.ShellScript_1.deployTfScriptOutput>
                                     echo now saying something else
                               environmentVariables: []
                               outputVariables: []
