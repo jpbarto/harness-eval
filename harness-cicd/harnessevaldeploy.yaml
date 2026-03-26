@@ -76,7 +76,7 @@ pipeline:
                                   script: |-
                                     echo reading value from template stage <+pipeline.stages.Prepare.variables.DeployInput>
                                     echo reading value from prior tf step <+pipeline.stages.Deploy.stages.CustomDeploy.spec.execution.steps.TerraformApply_1.log.url>
-                                    echo reading value from prior shell step <+pipeline.stages.Deploy.stages.CustomDeploy.spec.execution.steps.ShellScript_1.deployTfScriptOutput>
+                                    echo reading value from prior shell really <+pipeline.stages.Deploy.stages.CustomDeploy.spec.execution.steps.ShellScript_1.output.outputVariables.deployTFScriptOutput>
                                     echo now saying something else
                               environmentVariables: []
                               outputVariables: []
@@ -109,7 +109,7 @@ pipeline:
                               source:
                                 type: Inline
                                 spec:
-                                  script: echo see output value as
+                                  script: echo see output value as <+pipeline.stages.Deploy.stages.CustomDeploy.spec.execution.steps.ShellScript_1.output.outputVariables.deployTFScriptOutput>
                               environmentVariables: []
                               outputVariables: []
                             timeout: 10m
