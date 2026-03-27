@@ -8,7 +8,45 @@ pipeline:
       stages:
         - insert:
             identifier: Plan
-            stages: <+input>
+            stages:
+              - stage:
+                  name: Plan TF Deploy
+                  identifier: Plan_TF_Deploy
+                  description: ""
+                  type: Custom
+                  spec:
+                    execution:
+                      steps:
+                        - step:
+                            type: TerraformPlan
+                            name: TerraformPlan_1
+                            identifier: TerraformPlan_1
+                            spec:
+                              provisionerIdentifier: tf_prov
+                              configuration:
+                                command: Apply
+                                configFiles:
+                                  store:
+                                    spec:
+                                      connectorRef: account.pismojpbartogithubconnector
+                                      repoName: harness-eval
+                                      gitFetchType: Branch
+                                      branch: main
+                                      folderPath: terraform
+                                    type: Github
+                                providerCredential:
+                                  type: Aws
+                                  spec:
+                                    connectorRef: account.pismojpbartoawslocal
+                                    region: eu-west-1
+                                    roleArn: ""
+                                secretManagerRef: account.harnessSecretManager
+                                exportTerraformPlanJson: true
+                                storeTfPlanOnDelegate: true
+                                exportTerraformHumanReadablePlan: true
+                                skipRefreshCommand: false
+                            timeout: 10m
+                  tags: {}
         - insert:
             identifier: Deploy
             stages:
@@ -21,22 +59,39 @@ pipeline:
                     execution:
                       steps:
                         - step:
-                            type: ShellScript
-                            name: ShellScript_1
-                            identifier: ShellScript_1
+                            type: TerraformApply
+                            name: TerraformApply_1
+                            identifier: TerraformApply_1
                             spec:
-                              shell: Bash
-                              executionTarget: {}
-                              source:
-                                type: Inline
-                                spec:
-                                  script: echo preparing to deploy
-                              environmentVariables: []
-                              outputVariables: []
+                              provisionerIdentifier: tf_prov
+                              configuration:
+                                type: InheritFromPlan
                             timeout: 10m
                   tags: {}
         - insert:
             identifier: Validate
-            stages: <+input>
+            stages:
+              - stage:
+                  name: Validate Deployment
+                  identifier: Validate_Deployment
+                  description: ""
+                  type: Custom
+                  spec:
+                    execution:
+                      steps:
+                        - step:
+                            type: ShellScriptProvision
+                            name: ShellScriptProvision_1
+                            identifier: ShellScriptProvision_1
+                            spec:
+                              source:
+                                type: Inline
+                                spec:
+                                  script: |-
+                                    echo i will validate the parameter store value
+                                    which aws
+                              environmentVariables: []
+                            timeout: 10m
+                  tags: {}
   projectIdentifier: harnessdeployeval
   orgIdentifier: pismo
