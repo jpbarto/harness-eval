@@ -4,8 +4,6 @@ pipeline:
   tags: {}
   template:
     templateRef: account.pismojpbartodeploytemplate
-    versionLabel: v1
-    gitBranch: main
     templateInputs:
       stages:
         - insert:
