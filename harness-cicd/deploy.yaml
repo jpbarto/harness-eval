@@ -65,7 +65,23 @@ pipeline:
                             spec:
                               provisionerIdentifier: tf_prov
                               configuration:
-                                type: InheritFromPlan
+                                type: Inline
+                                spec:
+                                  configFiles:
+                                    store:
+                                      spec:
+                                        connectorRef: account.pismojpbartogithubconnector
+                                        repoName: harness-eval
+                                        gitFetchType: Branch
+                                        branch: main
+                                        folderPath: terraform
+                                      type: Github
+                                  providerCredential:
+                                    type: Aws
+                                    spec:
+                                      connectorRef: account.pismojpbartoawslocal
+                                      region: eu-west-1
+                                      roleArn: ""
                             timeout: 10m
                   tags: {}
         - insert:
