@@ -7,6 +7,9 @@ pipeline:
     templateInputs:
       stages:
         - insert:
+            identifier: Plan
+            stages: <+input>
+        - insert:
             identifier: Deploy
             stages:
               - stage:
@@ -32,5 +35,8 @@ pipeline:
                               outputVariables: []
                             timeout: 10m
                   tags: {}
+        - insert:
+            identifier: Validate
+            stages: <+input>
   projectIdentifier: harnessdeployeval
   orgIdentifier: pismo
