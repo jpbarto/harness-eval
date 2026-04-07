@@ -25,7 +25,7 @@ pipeline:
                       spec:
                         script: echo shell script 1
                     environmentVariables:
-                      - name: MyInputVar
+                      - name: MY_INPUT_VAR
                         type: String
                         value: <+pipeline.stages.Deploy_Eval_Stage_2.spec.execution.steps.ShellScript_1.name>
                     outputVariables: []
