@@ -23,11 +23,13 @@ pipeline:
                     source:
                       type: Inline
                       spec:
-                        script: echo shell script 1
+                        script: |-
+                          echo shell script 1
+                          echo read stage input variable $MY_INPUT_VAR
                     environmentVariables:
                       - name: MY_INPUT_VAR
                         type: String
-                        value: <+pipeline.stages.Preparation.spec.execution.steps.GetDeployStage.output.outputVariables.DeployStageB64YAML>
+                        value: <+pipeline.stages.Preparation.spec.execution.steps.GetDeployStage.output.outputVariables.DeployStageInputVar>
                     outputVariables: []
                   timeout: 10m
         tags: {}
