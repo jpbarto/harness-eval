@@ -3,3 +3,22 @@ service:
   identifier: guestbook_service
   orgIdentifier: default
   projectIdentifier: default_project
+  serviceDefinition:
+    spec:
+      manifests:
+        - manifest:
+            identifier: guestbook_manifest
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: account.jpbartogithub
+                  gitFetchType: Branch
+                  paths:
+                    - guestbook/
+                  repoName: harness-eval
+                  branch: main
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+    type: Kubernetes
