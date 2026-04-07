@@ -24,7 +24,10 @@ pipeline:
                       type: Inline
                       spec:
                         script: echo shell script 1
-                    environmentVariables: []
+                    environmentVariables:
+                      - name: MyInputVar
+                        type: String
+                        value: <+pipeline.stages.Deploy_Eval_Stage_2.spec.execution.steps.ShellScript_1.name>
                     outputVariables: []
                   timeout: 10m
         tags: {}
@@ -51,3 +54,9 @@ pipeline:
                     outputVariables: []
                   timeout: 10m
         tags: {}
+  variables:
+    - name: MyInputVar
+      type: String
+      description: ""
+      required: true
+      value: <cicd:squad.app.value>
