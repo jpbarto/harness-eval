@@ -27,7 +27,7 @@ pipeline:
                     environmentVariables:
                       - name: MY_INPUT_VAR
                         type: String
-                        value: <+pipeline.stages.Deploy_Eval_Stage_2.spec.execution.steps.ShellScript_1.name>
+                        value: <+pipeline.stages.Preparation.spec.execution.steps.GetDeployStage.output.outputVariables.DeployStageB64YAML>
                     outputVariables: []
                   timeout: 10m
         tags: {}
