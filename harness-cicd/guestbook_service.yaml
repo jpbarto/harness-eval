@@ -1,0 +1,5 @@
+service:
+  name: guestbook service
+  identifier: guestbook_service
+  orgIdentifier: default
+  projectIdentifier: default_project
