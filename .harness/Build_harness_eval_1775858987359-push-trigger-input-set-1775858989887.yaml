@@ -1,5 +1,6 @@
 inputSet:
   name: Build_harness_eval_1775858987359-push-trigger-input-set
+  tags: {}
   identifier: Build_harness_eval_1775858987359pushtriggerinputset
   orgIdentifier: default
   projectIdentifier: default_project
@@ -9,6 +10,6 @@ inputSet:
       ci:
         codebase:
           build:
-            type: branch
+            type: commitSha
             spec:
-              branch: <+trigger.branch>
+              commitSha: <+trigger.commitSha>
