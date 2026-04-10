@@ -30,35 +30,19 @@ pipeline:
                   spec:
                     shell: Sh
                     command: helm package helm/guestbook --version '1.0.7'
+              - step:
+                  type: Run
+                  name: Push to TTL
+                  identifier: Push_to_TTL
+                  spec:
+                    shell: Sh
+                    command: helm push helm-guestbook-1.0.7.tgz 'oci://ttl.sh/jpbarto/charts/helm-guestbook'
           platform:
             os: Linux
             arch: Amd64
           runtime:
             type: Cloud
             spec: {}
-    - stage:
-        name: Deliver
-        identifier: Deliver
-        description: ""
-        type: Custom
-        spec:
-          execution:
-            steps:
-              - step:
-                  type: ShellScript
-                  name: Push to TTL
-                  identifier: Push_to_TTL
-                  spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: helm push helm-guestbook-1.0.7.tgz 'oci://ttl.sh/jpbarto/charts/helm-guestbook'
-                    environmentVariables: []
-                    outputVariables: []
-                  timeout: 10m
-        tags: {}
   properties:
     ci:
       codebase:
