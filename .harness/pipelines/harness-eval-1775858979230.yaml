@@ -1,5 +1,5 @@
 pipeline:
-  name: Build harness-eval
+  name: harness-eval-ci
   identifier: Build_harness_eval_1775858987359
   projectIdentifier: default_project
   orgIdentifier: default
@@ -38,3 +38,4 @@ pipeline:
         connectorRef: account.jpbartogithub
         repoName: harness-eval
         build: <+input>
+  tags: {}
