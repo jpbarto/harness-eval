@@ -13,18 +13,52 @@ pipeline:
           execution:
             steps:
               - step:
+                  type: GitClone
+                  name: CloneRepo
+                  identifier: CloneRepo
+                  spec:
+                    connectorRef: account.jpbartogithub
+                    repoName: harness-eval
+                    build:
+                      type: branch
+                      spec:
+                        branch: main
+              - step:
                   type: Run
-                  name: Echo Welcome Message
-                  identifier: Echo_Welcome_Message
+                  name: Build Helm Chart
+                  identifier: Build_Helm_Chart
                   spec:
                     shell: Sh
-                    command: echo "Welcome to Harness CI"
+                    command: helm package helm/guestbook --version '1.0.7'
           platform:
             os: Linux
             arch: Amd64
           runtime:
             type: Docker
             spec: {}
+    - stage:
+        name: Deliver
+        identifier: Deliver
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Push to TTL
+                  identifier: Push_to_TTL
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: helm push helm-guestbook-1.0.7.tgz 'oci://ttl.sh/jpbarto/charts/helm-guestbook'
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+        tags: {}
   properties:
     ci:
       codebase:
