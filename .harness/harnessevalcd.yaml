@@ -1,0 +1,53 @@
+pipeline:
+  name: harness-eval-cd
+  identifier: harnessevalcd
+  projectIdentifier: default_project
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: Deploy Helm Chart
+        identifier: Deploy_Helm_Chart
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: NativeHelm
+          service:
+            serviceRef: jpbartohelmguestbook
+          environment:
+            environmentRef: eksenvironment
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: jpbartoguestbookinfrans
+          execution:
+            steps:
+              - step:
+                  name: Helm Deployment
+                  identifier: helmDeployment
+                  type: HelmDeploy
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+            rollbackSteps:
+              - step:
+                  name: Helm Rollback
+                  identifier: helmRollback
+                  type: HelmRollback
+                  timeout: 10m
+                  spec: {}
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
+  delegateSelectors:
+    - eks-delegate
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.jpbartogithub
+        repoName: harness-eval
+        build: <+input>
+        sparseCheckout: []
