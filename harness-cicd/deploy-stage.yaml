@@ -64,7 +64,7 @@ pipeline:
         spec:
           deploymentType: Kubernetes
           service:
-            serviceRef: guestbook_service
+            serviceRef: <+org.default_project.guestbook_service>
           environment:
             environmentRef: account.jpbartoacctlocalenv
             deployToAll: false
