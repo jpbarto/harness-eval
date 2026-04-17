@@ -1,4 +1,6 @@
 pipeline:
+  projectIdentifier: jpbartoapplication
+  orgIdentifier: default
   name: guestbook-deploy-verb
   identifier: guestbookdeployverb
   tags: {}
@@ -13,5 +15,3 @@ pipeline:
             spec:
               service:
                 serviceRef: org.jpbartoguestbookservice
-  projectIdentifier: jpbartoapplication
-  orgIdentifier: default
