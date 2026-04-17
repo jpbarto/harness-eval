@@ -15,11 +15,10 @@ pipeline:
           service:
             serviceRef: org.jpbartoguestbookservice
           environment:
-            environmentRef: <+input>
+            environmentRef: <+pipeline.variables.EnvironmentRef>
             deployToAll: false
-            environmentInputs: <+input>
-            serviceOverrideInputs: <+input>
-            infrastructureDefinitions: <+input>
+            infrastructureDefinitions:
+              - identifier: <+pipeline.variables.InfrastructureRef>
           execution:
             steps:
               - step:
