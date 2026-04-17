@@ -12,7 +12,6 @@ pipeline:
             type: Deployment
             spec:
               service:
-                serviceRef: <+input>
-                serviceInputs: <+input>
+                serviceRef: org.jpbartoguestbookservice
   projectIdentifier: jpbartoapplication
   orgIdentifier: default
