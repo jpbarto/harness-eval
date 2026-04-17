@@ -5,5 +5,14 @@ pipeline:
   template:
     templateRef: account.jpbartomicroservicedeployverb
     versionLabel: 1.0.0
+    templateInputs:
+      stages:
+        - stage:
+            identifier: Deploy_Helm_Chart
+            type: Deployment
+            spec:
+              service:
+                serviceRef: <+input>
+                serviceInputs: <+input>
   projectIdentifier: jpbartoapplication
   orgIdentifier: default
