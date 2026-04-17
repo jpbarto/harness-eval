@@ -1,0 +1,24 @@
+service:
+  name: jpbarto app service2
+  identifier: tf_app_service2
+  orgIdentifier: default
+  projectIdentifier: default_project
+  serviceDefinition:
+    spec:
+      manifests:
+        - manifest:
+            identifier: tf_app_manifest
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: account.jpbartogithub
+                  gitFetchType: Branch
+                  paths:
+                    - guestbook/
+                  repoName: harness-eval
+                  branch: main
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+    type: Kubernetes
