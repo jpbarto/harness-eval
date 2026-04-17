@@ -1,9 +1,0 @@
-pipeline:
-  name: guestbook-deploy-verb
-  identifier: guestbookdeployverb
-  tags: {}
-  template:
-    templateRef: account.jpbartomicroservicedeployverb
-    versionLabel: 1.0.0
-  projectIdentifier: jpbartoapplication
-  orgIdentifier: default
