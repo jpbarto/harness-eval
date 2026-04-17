@@ -15,10 +15,11 @@ pipeline:
           service:
             serviceRef: org.jpbartoguestbookservice
           environment:
-            environmentRef: account.jpbartoawsvpocenv
+            environmentRef: <+input>
             deployToAll: false
-            infrastructureDefinitions:
-              - identifier: jpbartoguestbookinfra
+            environmentInputs: <+input>
+            serviceOverrideInputs: <+input>
+            infrastructureDefinitions: <+input>
           execution:
             steps:
               - step:
