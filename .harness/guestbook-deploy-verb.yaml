@@ -1,17 +1,81 @@
 pipeline:
-  projectIdentifier: jpbartoapplication
-  orgIdentifier: default
   name: guestbook-deploy-verb
   identifier: guestbookdeployverb
   tags: {}
-  template:
-    templateRef: account.jpbartomicroservicedeployverb
-    versionLabel: 1.0.0
-    templateInputs:
-      stages:
-        - stage:
-            identifier: Deploy_Helm_Chart
-            type: Deployment
-            spec:
-              service:
-                serviceRef: org.jpbartoguestbookservice
+  projectIdentifier: jpbartoapplication
+  orgIdentifier: default
+  stages:
+    - stage:
+        name: Deploy Terraform
+        identifier: Deploy_Terraform
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: TerraformApply
+                  name: TerraformApply_1
+                  identifier: TerraformApply_1
+                  spec:
+                    provisionerIdentifier: tmp_provisioner
+                    configuration:
+                      type: Inline
+                      spec:
+                        configFiles:
+                          store:
+                            spec:
+                              connectorRef: account.jpbartogithubconnector
+                              repoName: jpbarto/harness-eval
+                              gitFetchType: Branch
+                              branch: main
+                              folderPath: /scripts/terraform
+                            type: Github
+                        providerCredential:
+                          type: Aws
+                          spec:
+                            connectorRef: account.jpbartoawsvpocconnector
+                            region: eu-west-1
+                            roleArn: ""
+                  timeout: 10m
+        tags: {}
+    - stage:
+        name: Deploy Helm Chart
+        identifier: Deploy_Helm_Chart
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: NativeHelm
+          environment:
+            environmentRef: <+pipeline.variables.EnvironmentRef>
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: <+pipeline.variables.InfrastructureRef>
+          service:
+            serviceRef: <+input>
+            serviceInputs: <+input>
+          execution:
+            steps:
+              - step:
+                  name: Helm Deployment
+                  identifier: helmDeployment
+                  type: HelmDeploy
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+            rollbackSteps:
+              - step:
+                  name: Helm Rollback
+                  identifier: helmRollback
+                  type: HelmRollback
+                  timeout: 10m
+                  spec: {}
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
+        when:
+          pipelineStatus: Success
