@@ -52,8 +52,7 @@ pipeline:
             infrastructureDefinitions:
               - identifier: <+pipeline.variables.InfrastructureRef>
           service:
-            serviceRef: <+input>
-            serviceInputs: <+input>
+            serviceRef: org.jpbartoguestbookservice
           execution:
             steps:
               - step:
