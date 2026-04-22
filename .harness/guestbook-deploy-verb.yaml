@@ -26,10 +26,10 @@ pipeline:
                           store:
                             spec:
                               connectorRef: account.jpbartogithubconnector
-                              repoName: jpbarto/harness-eval
+                              repoName: harness-eval
                               gitFetchType: Branch
                               branch: main
-                              folderPath: /scripts/terraform
+                              folderPath: /terraform
                             type: Github
                         providerCredential:
                           type: Aws
