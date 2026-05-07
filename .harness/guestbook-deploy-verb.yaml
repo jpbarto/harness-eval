@@ -37,6 +37,23 @@ pipeline:
                             connectorRef: account.jpbartoawsvpocconnector
                             region: eu-west-1
                             roleArn: ""
+                        vars:
+                          - name: env_name
+                            value: <+pipeline.variables.EnvironmentRef>
+                            type: String
+                          - name: harness_account_id
+                            value: <+account.identifier>
+                            type: String
+                          - name: harness_gitops_agent_id
+                            value: <+pipeline.variables.GitOpsAgentId>
+                            type: String
+                          - name: harness_gitops_repo_id
+                            value: <+pipeline.variables.GitOpsRepoId>
+                            type: String
+                        envVars:
+                          - name: HARNESS_PLATFORM_API_KEY
+                            value: <+secrets.getValue("account.jpbarto-coderio-svc-token")>
+                            type: Secret
                   timeout: 10m
         tags: {}
     - stage:
@@ -78,3 +95,20 @@ pipeline:
                 type: StageRollback
         when:
           pipelineStatus: Success
+  variables:
+    - name: EnvironmentRef
+      type: String
+      description: "Harness environment identifier (e.g. us-east-1)"
+      value: <+input>
+    - name: InfrastructureRef
+      type: String
+      description: "Harness infrastructure definition identifier"
+      value: <+input>
+    - name: GitOpsAgentId
+      type: String
+      description: "Harness GitOps agent identifier"
+      value: <+input>
+    - name: GitOpsRepoId
+      type: String
+      description: "Harness GitOps repository connector identifier"
+      value: <+input>
