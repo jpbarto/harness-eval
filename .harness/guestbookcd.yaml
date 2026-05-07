@@ -48,6 +48,35 @@ pipeline:
                                 region: us-east-1
                                 paths:
                                   - guestbook/state
+                        vars:
+                          - name: env_name
+                            value: <+pipeline.variables.EnvironmentRef>
+                            type: String
+                          - name: harness_account_id
+                            value: <+account.identifier>
+                            type: String
+                          - name: harness_org_id
+                            value: <+org.identifier>
+                            type: String
+                          - name: harness_project_id
+                            value: <+project.identifier>
+                            type: String
+                          - name: harness_gitops_agent_id
+                            value: <+pipeline.variables.GitOpsAgentId>
+                            type: String
+                          - name: harness_gitops_cluster_id
+                            value: <+pipeline.variables.GitOpsClusterId>
+                            type: String
+                          - name: harness_gitops_repo_id
+                            value: <+pipeline.variables.GitOpsRepoId>
+                            type: String
+                          - name: gitops_target_namespace
+                            value: <+org.variables.squadName>
+                            type: String
+                        envVars:
+                          - name: HARNESS_PLATFORM_API_KEY
+                            value: <+secrets.getValue("account.jpbarto-coderio-svc-token")>
+                            type: Secret
                   timeout: 10m
         tags: {}
   variables:
@@ -58,6 +87,10 @@ pipeline:
     - name: GitOpsAgentId
       type: String
       description: Harness GitOps agent identifier
+      value: <+input>
+    - name: GitOpsClusterId
+      type: String
+      description: Harness GitOps cluster identifier
       value: <+input>
     - name: GitOpsRepoId
       type: String

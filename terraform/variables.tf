@@ -23,9 +23,9 @@ variable "harness_gitops_agent_id" {
   description = "Identifier of the Harness GitOps agent"
 }
 
-variable "harness_gitops_repo_id" {
+variable "harness_gitops_cluster_id" {
   type        = string
-  description = "Identifier of the Harness GitOps repository connector"
+  description = "Identifier of the Harness GitOps cluster"
 }
 
 variable "gitops_target_namespace" {
