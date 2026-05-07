@@ -80,36 +80,43 @@ pipeline:
                   timeout: 10m
         tags: {}
     - stage:
-        name: Sync GitOps Application
-        identifier: Sync_GitOps_Application
+        name: Sync ArgoCD
+        identifier: Sync_ArgoCD
+        description: ""
         type: Deployment
         spec:
-          deploymentType: GitOps
-          service:
-            serviceRef: org.jpbartoguestbookservice
-          environment:
-            environmentRef: <+pipeline.variables.EnvironmentRef>
-            deployToAll: false
-            gitOpsClusters:
-              - identifier: <+pipeline.variables.GitOpsClusterId>
-                agentIdentifier: <+pipeline.variables.GitOpsAgentId>
+          deploymentType: Kubernetes
+          gitOpsEnabled: true
           execution:
             steps:
               - step:
                   type: GitOpsSync
-                  name: Sync GitOps Application
+                  name: GitOpsSync_1
                   identifier: GitOpsSync_1
                   spec:
                     prune: false
                     dryRun: false
                     applyOnly: false
                     forceApply: false
-                    applicationsList:
-                      - agentId: <+pipeline.variables.GitOpsAgentId>
-                        applicationName: guestbook-<+pipeline.variables.EnvironmentRef>
-                    waitForSteadyState: true
+                    applicationsList: []
+                    retryStrategy: {}
+                    retry: false
+                    syncOptions:
+                      skipSchemaValidation: false
+                      autoCreateNamespace: false
+                      pruneResourcesAtLast: false
+                      applyOutOfSyncOnly: false
+                      replaceResources: false
+                      prunePropagationPolicy: foreground
+                      respectIgnoreDifferences: false
+                      serverSideApply: false
                   timeout: 10m
             rollbackSteps: []
+          service:
+            serviceRef: jpbartoguestbook
+          environment:
+            environmentRef: account.jpbartoawsvpocenv
+            deployToAll: true
         tags: {}
         failureStrategies:
           - onFailure:
@@ -117,8 +124,6 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
-        when:
-          pipelineStatus: Success
   variables:
     - name: EnvironmentRef
       type: String
