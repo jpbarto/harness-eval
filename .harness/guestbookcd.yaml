@@ -1,0 +1,65 @@
+pipeline:
+  name: guestbook-cd
+  identifier: guestbookcd
+  projectIdentifier: psmjpbarto_guestbook
+  orgIdentifier: psmjpbarto
+  tags: {}
+  stages:
+    - stage:
+        name: Deploy Terraform
+        identifier: Deploy_Terraform
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: TerraformApply
+                  name: Apply Terraform
+                  identifier: TerraformApply_1
+                  spec:
+                    provisionerIdentifier: tmp_provisioner
+                    configuration:
+                      type: Inline
+                      spec:
+                        configFiles:
+                          store:
+                            spec:
+                              connectorRef: account.jpbartogithubconnector
+                              repoName: harness-eval
+                              gitFetchType: Branch
+                              branch: main
+                              folderPath: terraform
+                            type: Github
+                        providerCredential:
+                          type: Aws
+                          spec:
+                            connectorRef: account.jpbartoawsvpocconnector
+                            region: us-east-1
+                            roleArn: ""
+                        backendConfig:
+                          type: Remote
+                          spec:
+                            store:
+                              type: S3
+                              spec:
+                                connectorRef: org.psmjpbarto_cicacheconnector
+                                bucketName: jpbarto-awsvpoc-us-east-1-harness-tf-state
+                                region: us-east-1
+                                paths:
+                                  - guestbook/state
+                  timeout: 10m
+        tags: {}
+  variables:
+    - name: EnvironmentRef
+      type: String
+      description: Harness environment identifier (e.g. us-east-1)
+      value: <+input>
+    - name: GitOpsAgentId
+      type: String
+      description: Harness GitOps agent identifier
+      value: <+input>
+    - name: GitOpsRepoId
+      type: String
+      description: Harness GitOps repository connector identifier
+      value: <+input>
