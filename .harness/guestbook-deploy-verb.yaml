@@ -44,6 +44,15 @@ pipeline:
                           - name: harness_account_id
                             value: <+account.identifier>
                             type: String
+                          - name: harness_org_id
+                            value: <+org.identifier>
+                            type: String
+                          - name: harness_project_id
+                            value: <+project.identifier>
+                            type: String
+                          - name: gitops_target_namespace
+                            value: <+org.variables.squadName>
+                            type: String
                           - name: harness_gitops_agent_id
                             value: <+pipeline.variables.GitOpsAgentId>
                             type: String
