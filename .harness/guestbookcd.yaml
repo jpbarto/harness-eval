@@ -78,6 +78,23 @@ pipeline:
                             value: <+secrets.getValue("account.jpbarto-coderio-svc-token")>
                             type: Secret
                   timeout: 10m
+        tags: {}
+    - stage:
+        name: Sync GitOps Application
+        identifier: Sync_GitOps_Application
+        type: Deployment
+        spec:
+          deploymentType: GitOps
+          service:
+            serviceRef: org.jpbartoguestbookservice
+          environment:
+            environmentRef: <+pipeline.variables.EnvironmentRef>
+            deployToAll: false
+            gitOpsClusters:
+              - identifier: <+pipeline.variables.GitOpsClusterId>
+                agentIdentifier: <+pipeline.variables.GitOpsAgentId>
+          execution:
+            steps:
               - step:
                   type: GitOpsSync
                   name: Sync GitOps Application
@@ -90,13 +107,18 @@ pipeline:
                     applicationsList:
                       - agentId: <+pipeline.variables.GitOpsAgentId>
                         applicationName: guestbook-<+pipeline.variables.EnvironmentRef>
-                    retryStrategy:
-                      limit: 2
-                      retryIntervalUnit: Seconds
-                      baseDelay: 10
                     waitForSteadyState: true
                   timeout: 10m
+            rollbackSteps: []
         tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
+        when:
+          pipelineStatus: Success
   variables:
     - name: EnvironmentRef
       type: String
