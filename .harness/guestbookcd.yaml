@@ -78,6 +78,24 @@ pipeline:
                             value: <+secrets.getValue("account.jpbarto-coderio-svc-token")>
                             type: Secret
                   timeout: 10m
+              - step:
+                  type: GitOpsSync
+                  name: Sync GitOps Application
+                  identifier: GitOpsSync_1
+                  spec:
+                    prune: false
+                    dryRun: false
+                    applyOnly: false
+                    forceApply: false
+                    applicationsList:
+                      - agentId: <+pipeline.variables.GitOpsAgentId>
+                        applicationName: guestbook-<+pipeline.variables.EnvironmentRef>
+                    retryStrategy:
+                      limit: 2
+                      retryIntervalUnit: Seconds
+                      baseDelay: 10
+                    waitForSteadyState: true
+                  timeout: 10m
         tags: {}
   variables:
     - name: EnvironmentRef
