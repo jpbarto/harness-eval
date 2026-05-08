@@ -34,7 +34,7 @@ pipeline:
                         providerCredential:
                           type: Aws
                           spec:
-                            connectorRef: account.jpbartoawsvpocconnector
+                            connectorRef: org.psmjpbarto_cicacheconnector
                             region: us-east-1
                             roleArn: ""
                         backendConfig:
