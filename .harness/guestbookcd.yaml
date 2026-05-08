@@ -87,7 +87,9 @@ pipeline:
                     dryRun: false
                     applyOnly: false
                     forceApply: false
-                    applicationsList: []
+                    applicationsList:
+                      - applicationName: guestbook-<+pipeline.variables.EnvironmentRef>
+                        agentId: <+pipeline.variables.GitOpsAgentId>
                     retryStrategy: {}
                     retry: false
                     syncOptions:
