@@ -46,6 +46,8 @@ pipeline:
                               region = "us-east-1"
                   timeout: 10m
         tags: {}
+        delegateSelectors:
+          - jpbarto-aws-vpoc-delegate-us-east-1
     - stage:
         name: Sync ArgoCD
         identifier: Sync_ArgoCD
@@ -91,6 +93,8 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+        delegateSelectors:
+          - jpbarto-aws-vpoc-delegate-us-east-1
   variables:
     - name: EnvironmentRef
       type: String
