@@ -37,7 +37,7 @@ resource "harness_platform_gitops_applications" "guestbook" {
       name = "guestbook-${var.env_name}"
       labels = {
         "harness.io/serviceRef" = harness_platform_service.guestbook.identifier
-        "harness.io/envRef"     = "jpbartoawsvpocenv"
+        "harness.io/envRef"     = "account.jpbartoawsvpocenv"
       }
     }
     spec {
