@@ -141,20 +141,9 @@ pipeline:
                           SERVICE_NAME="guestbook-<+pipeline.variables.EnvironmentRef>-helm-guestbook"
                           NAMESPACE="<+variable.org.squadName>"
 
-                          # Try LoadBalancer hostname first, then IP, then ClusterIP, then cluster DNS
-                          SERVICE_ENDPOINT=$(kubectl get service "${SERVICE_NAME}" -n "${NAMESPACE}" \
-                            -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null)
-                          if [ -z "${SERVICE_ENDPOINT}" ]; then
-                            SERVICE_ENDPOINT=$(kubectl get service "${SERVICE_NAME}" -n "${NAMESPACE}" \
-                              -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
-                          fi
-                          if [ -z "${SERVICE_ENDPOINT}" ]; then
-                            SERVICE_ENDPOINT=$(kubectl get service "${SERVICE_NAME}" -n "${NAMESPACE}" \
-                              -o jsonpath='{.spec.clusterIP}' 2>/dev/null)
-                          fi
-                          if [ -z "${SERVICE_ENDPOINT}" ] || [ "${SERVICE_ENDPOINT}" = "None" ]; then
-                            SERVICE_ENDPOINT="${SERVICE_NAME}.${NAMESPACE}.svc.cluster.local"
-                          fi
+                          SERVICE_PORT=$(kubectl get service "${SERVICE_NAME}" -n "${NAMESPACE}" \
+                            -o jsonpath='{.spec.ports[0].port}' 2>/dev/null)
+                          SERVICE_ENDPOINT="${SERVICE_NAME}.${NAMESPACE}.svc.cluster.local:${SERVICE_PORT}"
 
                           MANIFEST_JSON=$(cat <<EOF
                           {
