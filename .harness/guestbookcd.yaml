@@ -28,7 +28,7 @@ pipeline:
                               connectorRef: account.jpbartogithubconnector
                               repoName: harness-eval
                               gitFetchType: Branch
-                              branch: main
+                              branch: <+pipeline.variables.AppRelease>
                               folderPath: terraform
                             type: Github
                         providerCredential:
