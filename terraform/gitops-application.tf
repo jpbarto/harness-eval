@@ -63,7 +63,7 @@ resource "harness_platform_gitops_applications" "guestbook" {
           "PrunePropagationPolicy=foreground",
           "CreateNamespace=true",
           "Validate=true",
-          "PruneLast=false",
+          "PruneLast=true",
           "ApplyOutOfSyncOnly=false",
           "FluxSubsystem=false",
           "AutoCreateFluxResources=false",
