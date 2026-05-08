@@ -42,7 +42,7 @@ pipeline:
                             value: <+account.identifier>
                             type: String
                           - name: HARNESS_PLATFORM_API_KEY
-                            value: <+secrets.getValue("jpbarto-coderio-svc-token")>
+                            value: <+secrets.getValue("harness_platform_api_key")>
                             type: String
                         backendConfig:
                           type: Inline
