@@ -18,9 +18,7 @@ spec:
   strategy:
     canary:
       steps:
-      {{- range .Values.canary.steps }}
-        - {{ . | toYaml | trim }}
-      {{- end }}
+        {{- toYaml .Values.canary.steps | nindent 8 }}
   template:
     metadata:
       labels:
