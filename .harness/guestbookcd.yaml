@@ -37,6 +37,13 @@ pipeline:
                             connectorRef: org.psmjpbarto_cicacheconnector
                             region: us-east-1
                             roleArn: ""
+                        environmentVariables:
+                          - name: HARNESS_ACCOUNT_ID
+                            value: <+account.identifier>
+                            type: String
+                          - name: HARNESS_PLATFORM_API_KEY
+                            value: <+secrets.getValue("jpbarto-coderio-svc-token")>
+                            type: Secret
                         varFiles:
                           - varFile:
                               identifier: inline_tfvars
