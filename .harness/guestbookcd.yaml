@@ -35,15 +35,15 @@ pipeline:
                           type: Aws
                           spec:
                             connectorRef: org.psmjpbarto_cicacheconnector
-                            region: us-east-1
+                            region: <+pipeline.variables.AwsRegion>
                             roleArn: ""
                         backendConfig:
                           type: Inline
                           spec:
                             content: |-
-                              bucket = "jpbarto-awsvpoc-us-east-1-harness-tf-state"
+                              bucket = "jpbarto-awsvpoc-<+pipeline.variables.AwsRegion>-harness-tf-state"
                               key    = "psm-jpbarto/guestbook/state"
-                              region = "us-east-1"
+                              region = "<+pipeline.variables.AwsRegion>"
                         environmentVariables:
                           - name: HARNESS_ACCOUNT_ID
                             value: <+account.identifier>
@@ -57,6 +57,7 @@ pipeline:
                               type: Inline
                               spec:
                                 content: |-
+                                  aws_region                = "<+pipeline.variables.AwsRegion>"
                                   env_name                  = "<+pipeline.variables.EnvironmentRef>"
                                   harness_account_id        = "dLgVufj0RcmqCZSIwllL6g"
                                   harness_org_id            = "<+org.identifier>"
@@ -68,7 +69,7 @@ pipeline:
                   timeout: 10m
         tags: {}
         delegateSelectors:
-          - jpbarto-aws-vpoc-delegate-us-east-1
+          - jpbarto-aws-vpoc-delegate-<+pipeline.variables.AwsRegion>
     - stage:
         name: Sync ArgoCD
         identifier: Sync_ArgoCD
@@ -117,7 +118,7 @@ pipeline:
               action:
                 type: StageRollback
         delegateSelectors:
-          - jpbarto-aws-vpoc-delegate-us-east-1
+          - jpbarto-aws-vpoc-delegate-<+pipeline.variables.AwsRegion>
     - stage:
         name: Gather Deployment Info
         identifier: Gather_Deployment_Info
@@ -173,8 +174,12 @@ pipeline:
                   timeout: 5m
         tags: {}
         delegateSelectors:
-          - jpbarto-aws-vpoc-delegate-us-east-1
+          - jpbarto-aws-vpoc-delegate-<+pipeline.variables.AwsRegion>
   variables:
+    - name: AwsRegion
+      type: String
+      description: AWS region to deploy resources into (e.g. us-east-1)
+      value: <+input>
     - name: AppRelease
       type: String
       description: Git tag or branch of the application to deploy (e.g. rel09)

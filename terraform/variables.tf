@@ -1,3 +1,8 @@
+variable "aws_region" {
+  type        = string
+  description = "AWS region to deploy resources into (e.g. us-east-1)"
+}
+
 variable "env_name" {
   type        = string
   description = "Harness environment name; used to name the GitOps application as guestbook-<env_name>"
