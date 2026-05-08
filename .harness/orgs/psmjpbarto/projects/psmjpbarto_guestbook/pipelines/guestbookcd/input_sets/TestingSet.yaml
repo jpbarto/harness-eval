@@ -1,0 +1,17 @@
+inputSet:
+  name: TestingSet
+  identifier: TestingSet
+  orgIdentifier: psmjpbarto
+  projectIdentifier: psmjpbarto_guestbook
+  pipeline:
+    identifier: guestbookcd
+    variables:
+      - name: EnvironmentRef
+        type: String
+        value: us-east-1
+      - name: GitOpsAgentId
+        type: String
+        value: account.gitops_jpbarto_awsvpoc_us_east_1
+      - name: GitOpsClusterId
+        type: String
+        value: account.jpbartoawsvpocuseast1
