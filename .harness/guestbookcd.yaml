@@ -44,6 +44,13 @@ pipeline:
                           - name: HARNESS_PLATFORM_API_KEY
                             value: <+secrets.getValue("jpbarto-coderio-svc-token")>
                             type: Secret
+                        backendConfig:
+                          type: Inline
+                          spec:
+                            content: |-
+                              bucket = "jpbarto-awsvpoc-us-east-1-harness-tf-state"
+                              key    = "psm-jpbarto/guestbook/state"
+                              region = "us-east-1"
                         varFiles:
                           - varFile:
                               identifier: inline_tfvars
@@ -52,18 +59,11 @@ pipeline:
                                 content: |-
                                   env_name                  = "<+pipeline.variables.EnvironmentRef>"
                                   harness_account_id        = "dLgVufj0RcmqCZSIwllL6g"
-                                  harness_org_id            = "psmjpbarto"
-                                  harness_project_id        = "psmjpbarto_guestbook"
+                                  harness_org_id            = "<+org.identifier>"
+                                  harness_project_id        = "<+project.identifier>"
                                   harness_gitops_agent_id   = "<+pipeline.variables.GitOpsAgentId>"
                                   harness_gitops_cluster_id = "<+pipeline.variables.GitOpsClusterId>"
-                                  gitops_target_namespace   = "psm-jpbarto"
-                        backendConfig:
-                          type: Inline
-                          spec:
-                            content: |-
-                              bucket = "jpbarto-awsvpoc-us-east-1-harness-tf-state"
-                              key    = "psm-jpbarto/guestbook/state"
-                              region = "us-east-1"
+                                  gitops_target_namespace   = "<+variable.org.squadName>"
                   timeout: 10m
         tags: {}
         delegateSelectors:
