@@ -52,6 +52,10 @@ resource "harness_platform_gitops_applications" "guestbook" {
         path            = "helm/guestbook"
         helm {
           value_files = ["$values/envs/${var.env_name}/values.yaml"]
+          parameter {
+            name  = "releaseTag"
+            value = var.gitops_target_revision
+          }
         }
       }
       destination {

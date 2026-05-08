@@ -4,6 +4,7 @@
 
 replicaCount: 4
 configVersion: default
+releaseTag: ""
 
 canary:
   steps:

@@ -8,6 +8,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     config: {{ .Values.configVersion }}
+    releaseTag: {{ .Values.releaseTag | quote }}
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 3
@@ -24,6 +25,7 @@ spec:
       labels:
         app: {{ template "helm-guestbook.name" . }}
         release: {{ .Release.Name }}
+        releaseTag: {{ .Values.releaseTag | quote }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
