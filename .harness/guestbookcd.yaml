@@ -104,7 +104,7 @@ pipeline:
                   timeout: 10m
             rollbackSteps: []
           service:
-            serviceRef: jpbartoguestbook
+            serviceRef: guestbook
           environment:
             environmentRef: account.jpbartoawsvpocenv
             deployToAll: true
