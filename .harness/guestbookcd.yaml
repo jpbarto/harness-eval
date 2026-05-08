@@ -63,6 +63,7 @@ pipeline:
                                   harness_project_id        = "<+project.identifier>"
                                   harness_gitops_agent_id   = "<+pipeline.variables.GitOpsAgentId>"
                                   harness_gitops_cluster_id = "<+pipeline.variables.GitOpsClusterId>"
+                                  gitops_target_revision    = "<+pipeline.variables.AppRelease>"
                                   gitops_target_namespace   = "<+variable.org.squadName>"
                   timeout: 10m
         tags: {}
@@ -117,7 +118,59 @@ pipeline:
                 type: StageRollback
         delegateSelectors:
           - jpbarto-aws-vpoc-delegate-us-east-1
+    - stage:
+        name: Gather Deployment Info
+        identifier: Gather_Deployment_Info
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Build Deployment Manifest
+                  identifier: Build_Deployment_Manifest
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |-
+                          SERVICE_NAME="guestbook-<+pipeline.variables.EnvironmentRef>-helm-guestbook"
+                          NAMESPACE="<+variable.org.squadName>"
+
+                          SERVICE_ENDPOINT=$(kubectl get service "${SERVICE_NAME}" -n "${NAMESPACE}" \
+                            -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null)
+                          if [ -z "${SERVICE_ENDPOINT}" ]; then
+                            SERVICE_ENDPOINT=$(kubectl get service "${SERVICE_NAME}" -n "${NAMESPACE}" \
+                              -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
+                          fi
+
+                          MANIFEST_JSON=$(cat <<EOF
+                          {
+                            "release": "<+pipeline.stages.Deploy_Terraform.spec.execution.steps.TerraformApply_1.output.gitops_application_release>",
+                            "serviceEndpoint": "${SERVICE_ENDPOINT}",
+                            "ssmParameterArn": "<+pipeline.stages.Deploy_Terraform.spec.execution.steps.TerraformApply_1.output.ssm_parameter_arn>"
+                          }
+                          EOF
+                          )
+
+                          export deploymentManifest=$(echo "${MANIFEST_JSON}" | base64 -w 0)
+                    environmentVariables: []
+                    outputVariables:
+                      - name: deploymentManifest
+                        type: String
+                        value: deploymentManifest
+                  timeout: 5m
+        tags: {}
+        delegateSelectors:
+          - jpbarto-aws-vpoc-delegate-us-east-1
   variables:
+    - name: AppRelease
+      type: String
+      description: Git tag or branch of the application to deploy (e.g. rel09)
+      value: <+input>
     - name: EnvironmentRef
       type: String
       description: Harness environment identifier (e.g. us-east-1)

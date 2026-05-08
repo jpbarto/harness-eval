@@ -43,12 +43,12 @@ resource "harness_platform_gitops_applications" "guestbook" {
     spec {
       sources {
         repo_url        = "https://github.com/jpbarto/harness-eval"
-        target_revision = "rel09"
+        target_revision = var.gitops_target_revision
         ref             = "values"
       }
       sources {
         repo_url        = "https://github.com/jpbarto/harness-eval"
-        target_revision = "rel09"
+        target_revision = var.gitops_target_revision
         path            = "helm/guestbook"
         helm {
           value_files = ["$values/envs/${var.env_name}/values.yaml"]
