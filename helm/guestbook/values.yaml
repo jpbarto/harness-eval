@@ -8,9 +8,9 @@ configVersion: default
 canary:
   steps:
     - setWeight: 20
-    - pause: {}          # manual promotion required; replace with e.g. {duration: 10m} for automatic
+    - pause: {duration: 1m}          # manual promotion required; replace with e.g. {duration: 10m} for automatic
     - setWeight: 50
-    - pause: {duration: 5m}
+    - pause: {duration: 2m}
     - setWeight: 100
 
 image:
