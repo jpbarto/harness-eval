@@ -27,9 +27,9 @@ pipeline:
                             spec:
                               connectorRef: account.jpbartogithubconnector
                               repoName: harness-eval
-                              gitFetchType: Branch
-                              branch: main
+                              gitFetchType: Commit
                               folderPath: terraform
+                              commitId: <+pipeline.variables.AppRelease>
                             type: Github
                         providerCredential:
                           type: Aws
@@ -37,13 +37,6 @@ pipeline:
                             connectorRef: org.psmjpbarto_cicacheconnector
                             region: us-east-1
                             roleArn: ""
-                        environmentVariables:
-                          - name: HARNESS_ACCOUNT_ID
-                            value: <+account.identifier>
-                            type: String
-                          - name: HARNESS_PLATFORM_API_KEY
-                            value: <+secrets.getValue("harness_platform_api_key")>
-                            type: String
                         backendConfig:
                           type: Inline
                           spec:
@@ -51,6 +44,13 @@ pipeline:
                               bucket = "jpbarto-awsvpoc-us-east-1-harness-tf-state"
                               key    = "psm-jpbarto/guestbook/state"
                               region = "us-east-1"
+                        environmentVariables:
+                          - name: HARNESS_ACCOUNT_ID
+                            value: <+account.identifier>
+                            type: String
+                          - name: HARNESS_PLATFORM_API_KEY
+                            value: <+secrets.getValue("harness_platform_api_key")>
+                            type: String
                         varFiles:
                           - varFile:
                               identifier: inline_tfvars
