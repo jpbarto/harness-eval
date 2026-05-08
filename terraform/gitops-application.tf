@@ -1,6 +1,25 @@
 # Credentials read from HARNESS_ACCOUNT_ID and HARNESS_PLATFORM_API_KEY env vars
 provider "harness" {}
 
+resource "harness_platform_service" "guestbook" {
+  org_id      = var.harness_org_id
+  project_id  = var.harness_project_id
+  identifier  = "guestbook"
+  name        = "guestbook"
+
+  yaml = <<-EOT
+    service:
+      name: guestbook
+      identifier: guestbook
+      orgIdentifier: ${var.harness_org_id}
+      projectIdentifier: ${var.harness_project_id}
+      gitOpsEnabled: true
+      serviceDefinition:
+        type: Kubernetes
+        spec: {}
+  EOT
+}
+
 resource "harness_platform_gitops_applications" "guestbook" {
   org_id               = var.harness_org_id
   project_id           = var.harness_project_id
@@ -16,6 +35,9 @@ resource "harness_platform_gitops_applications" "guestbook" {
   application {
     metadata {
       name = "guestbook-${var.env_name}"
+      labels = {
+        "harness.io/serviceRef" = harness_platform_service.guestbook.identifier
+      }
     }
     spec {
       sources {
