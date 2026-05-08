@@ -104,7 +104,3 @@ pipeline:
       type: String
       description: Harness GitOps cluster identifier
       value: <+input>
-    - name: GitOpsRepoId
-      type: String
-      description: Harness GitOps repository connector identifier
-      value: <+input>
